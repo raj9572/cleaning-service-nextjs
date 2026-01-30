@@ -8,7 +8,7 @@ const reviewSchema = new mongoose.Schema(
     images: [String],
     videos: [String],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const productSchema = new mongoose.Schema(
@@ -36,12 +36,14 @@ const productSchema = new mongoose.Schema(
     inStock: { type: Boolean, default: true },
 
     onSale: { type: Boolean, default: false },
+    isTopDeal: { type: Boolean, default: false },
 
     rating: { type: Number, default: 0 },
 
     reviews: [reviewSchema],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-export default mongoose.models.Product || mongoose.model("Product", productSchema);
+export default mongoose.models.Product ||
+  mongoose.model("Product", productSchema);

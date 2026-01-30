@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(req, { params }) {
   try {
@@ -21,7 +22,11 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
+    const authResult = requireAdmin(req);
+    if (authResult instanceof Response) return authResult;
+
     await connectDB();
+
     const body = await req.json();
 
     const { id } = await params;
@@ -40,6 +45,9 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
+    const authResult = requireAdmin(req);
+    if (authResult instanceof Response) return authResult;
+
     await connectDB();
 
     const { id } = await params;

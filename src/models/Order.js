@@ -17,7 +17,7 @@ const orderProductSchema = new mongoose.Schema(
     },
     subtotal: Number,
   },
-  { _id: false }
+  { _id: false },
 );
 
 const shippingSchema = new mongoose.Schema(
@@ -48,7 +48,7 @@ const shippingSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const orderSchema = new mongoose.Schema(
@@ -57,6 +57,11 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       default: null,
+    },
+    customerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
 
     products: {
@@ -83,7 +88,7 @@ const orderSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // ✅ avoid OverwriteModelError in Next.js

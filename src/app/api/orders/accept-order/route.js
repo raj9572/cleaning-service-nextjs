@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import Order from "@/models/Order";
+import mongoose from "mongoose";
 
 export async function POST(req) {
   try {
@@ -9,7 +10,7 @@ export async function POST(req) {
     if (!orderId || !workerId) {
       return Response.json(
         { message: "orderId and workerId are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -21,18 +22,18 @@ export async function POST(req) {
     if (order.isTaken) {
       return Response.json(
         { message: "Order already taken by someone" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
+    order.takenBy = new mongoose.Types.ObjectId(workerId);
     order.isTaken = true;
-    order.takenBy = workerId;
 
     await order.save();
 
     return Response.json(
       { message: "Order accepted successfully", order },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return Response.json({ message: error.message }, { status: 500 });

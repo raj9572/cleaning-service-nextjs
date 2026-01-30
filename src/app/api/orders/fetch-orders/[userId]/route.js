@@ -1,15 +1,15 @@
 import { connectDB } from "@/lib/db";
 import Order from "@/models/Order";
-
+import mongoose from "mongoose";
+import "@/models/User";
 export async function GET(req, { params }) {
   try {
     await connectDB();
     const { userId } = await params;
 
-    // Here userId refers to takenBy OR customer?
-    // In your schema there is no customer field,
-    // so this fetch is based on takenBy.
-    const orders = await Order.find({ takenBy: userId })
+    const orders = await Order.find({
+      customerId: new mongoose.Types.ObjectId(userId),
+    })
       .populate("takenBy", "name email role")
       .populate("products.product", "title images")
       .sort({ createdAt: -1 });

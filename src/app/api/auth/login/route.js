@@ -7,28 +7,35 @@ export async function POST(req) {
   try {
     await connectDB();
     const { email, password } = await req.json();
+    const emailLower = email.toLowerCase();
 
     if (!email || !password) {
       return Response.json(
         { message: "Email and password are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: emailLower });
     if (!user) {
-      return Response.json({ message: "Invalid email or password" }, { status: 401 });
+      return Response.json(
+        { message: "Invalid email or password" },
+        { status: 401 },
+      );
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return Response.json({ message: "Invalid email or password" }, { status: 401 });
+      return Response.json(
+        { message: "Invalid email or password" },
+        { status: 401 },
+      );
     }
 
     const token = signToken({
       id: user._id.toString(),
       email: user.email,
-      role: user.role
+      role: user.role,
     });
 
     return Response.json(
@@ -39,10 +46,10 @@ export async function POST(req) {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role
-        }
+          role: user.role,
+        },
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return Response.json({ message: error.message }, { status: 500 });

@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import Order from "@/models/Order";
+import "@/models/User";
 
 export async function GET() {
   try {

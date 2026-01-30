@@ -12,11 +12,11 @@ export async function POST(req) {
     if (!title || !key || !category) {
       return Response.json(
         { message: "title, key and category are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const categoryExists = await Category.findOne({key:category});
+    const categoryExists = await Category.findById(category);
     if (!categoryExists) {
       return Response.json({ message: "Invalid categoryId" }, { status: 400 });
     }
@@ -35,7 +35,7 @@ export async function POST(req) {
 
     return Response.json(
       { message: "SubCategory created successfully", subCategory },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     return Response.json({ message: error.message }, { status: 500 });

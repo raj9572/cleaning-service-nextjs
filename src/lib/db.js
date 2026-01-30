@@ -12,7 +12,22 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
+let isConnected = false;
+
 export async function connectDB() {
+  if (isConnected) {
+    console.log("✅ DB already connected:", mongoose.connection.name);
+    return;
+  }
+
+  console.log("🟡 Connecting to MongoDB...");
+  console.log("🟡 MONGODB_URI:", process.env.MONGODB_URI);
+
+  await mongoose.connect(process.env.MONGODB_URI);
+
+  isConnected = true;
+
+  console.log("🟢 DB connected:", mongoose.connection.name);
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
